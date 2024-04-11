@@ -14,9 +14,8 @@ using EventInstance = FMOD.Studio.EventInstance;
 namespace Celeste.Mod.SpeedrunTool.SaveLoad;
 
 public sealed class StateManager {
-    private static readonly Lazy<StateManager> Lazy = new(() => new StateManager());
-    public static StateManager Instance => Lazy.Value;
-    private StateManager() { }
+    public static StateManager Instance => SaveSlotsManager.StateManagerInstance;
+    internal StateManager() { }
 
     private static readonly Lazy<PropertyInfo> InGameOverworldHelperIsOpen = new(
         () => ModUtils.GetType("CollabUtils2", "Celeste.Mod.CollabUtils2.UI.InGameOverworldHelper")?.GetPropertyInfo("IsOpen")
@@ -79,63 +78,63 @@ public sealed class StateManager {
 
     #region Hook
 
-    public void Load() {
+    public static void Load() {
         On.Monocle.Scene.BeforeUpdate += SceneOnBeforeUpdate;
         On.Celeste.Level.Update += UpdateBackdropWhenWaiting;
         On.Monocle.Scene.Begin += ClearStateWhenSwitchScene;
         On.Celeste.PlayerDeadBody.End += AutoLoadStateWhenDeath;
         SaveLoadAction.SafeAdd(
-            (_, _) => UpdateLastChecks(),
-            (_, _) => UpdateLastChecks(),
-            () => lastChecks.Clear()
+            (_, _) => Instance.UpdateLastChecks(),
+            (_, _) => Instance.UpdateLastChecks(),
+            () => Instance.lastChecks.Clear()
         );
         RegisterHotkeys();
     }
 
-    public void Unload() {
+    public static void Unload() {
         On.Monocle.Scene.BeforeUpdate -= SceneOnBeforeUpdate;
         On.Celeste.Level.Update -= UpdateBackdropWhenWaiting;
         On.Monocle.Scene.Begin -= ClearStateWhenSwitchScene;
         On.Celeste.PlayerDeadBody.End -= AutoLoadStateWhenDeath;
     }
 
-    private void RegisterHotkeys() {
+    private static void RegisterHotkeys() {
         Hotkey.SaveState.RegisterPressedAction(scene => {
             if (scene is Level) {
 #if DEBUG
                 JetBrains.Profiler.Api.MeasureProfiler.StartCollectingData();
-                SaveState(false);
+                SaveSlotsManager.SaveState();
                 JetBrains.Profiler.Api.MeasureProfiler.SaveData();
 #else
-                SaveState(false);
+                SaveSlotsManager.SaveState();
 #endif
             }
         });
-
         Hotkey.LoadState.RegisterPressedAction(scene => {
-            if (scene is Level {Paused: false} && State == State.None) {
-                if (IsSaved) {
-                    LoadState(false);
+            if (scene is Level { Paused: false } && SaveSlotsManager.IsAllFree()) {
+                if (SaveSlotsManager.IsSaved()) {
+                    SaveSlotsManager.LoadState();
                 } else {
                     PopupMessageUtils.Show(DialogIds.NotSavedStateTooltip.DialogClean(), DialogIds.NotSavedStateYetDialog);
                 }
             }
         });
-
         Hotkey.ClearState.RegisterPressedAction(scene => {
-            if (scene is Level {Paused: false} && State == State.None) {
-                ClearStateAndShowMessage();
+            if (scene is Level { Paused: false } && SaveSlotsManager.IsAllFree()) {
+                SaveSlotsManager.ClearStateAndShowMessage();
             }
         });
 
         Hotkey.SwitchAutoLoadState.RegisterPressedAction(scene => {
-            if (scene is Level {Paused: false}) {
+            if (scene is Level { Paused: false }) {
                 ModSettings.AutoLoadStateAfterDeath = !ModSettings.AutoLoadStateAfterDeath;
                 SpeedrunToolModule.Instance.SaveSettings();
                 string state = (ModSettings.AutoLoadStateAfterDeath ? DialogIds.On : DialogIds.Off).DialogClean();
                 PopupMessageUtils.ShowOptionState(DialogIds.AutoLoadStateAfterDeath.DialogClean(), state);
             }
         });
+
+        SaveSlotsManager.RegisterHotkeys();
     }
 
     private void UpdateLastChecks() {
@@ -162,23 +161,23 @@ public sealed class StateManager {
         return !lastCheck;
     }
 
-    private void SceneOnBeforeUpdate(On.Monocle.Scene.orig_BeforeUpdate orig, Scene self) {
-        if (ModSettings.Enabled && self is Level level && State == State.Waiting) {
-            if (UnfreezeInputs.Any(IsUnfreeze) || Hotkey.CheckDeathStatistics.Pressed() || Hotkey.LoadState.Pressed()) {
-                lastChecks.Clear();
-                OutOfFreeze(level);
+    private static void SceneOnBeforeUpdate(On.Monocle.Scene.orig_BeforeUpdate orig, Scene self) {
+        if (ModSettings.Enabled && self is Level level && Instance.State == State.Waiting) {
+            if (Instance.UnfreezeInputs.Any(Instance.IsUnfreeze) || Hotkey.CheckDeathStatistics.Pressed() || Hotkey.LoadState.Pressed()) {
+                Instance.lastChecks.Clear();
+                Instance.OutOfFreeze(level);
             }
 
-            if (State == State.Waiting) {
-                UpdateLastChecks();
+            if (Instance.State == State.Waiting) {
+                Instance.UpdateLastChecks();
             }
         }
 
         orig(self);
     }
 
-    private void UpdateBackdropWhenWaiting(On.Celeste.Level.orig_Update orig, Level level) {
-        if (State != State.None) {
+    private static void UpdateBackdropWhenWaiting(On.Celeste.Level.orig_Update orig, Level level) {
+        if (Instance.State != State.None) {
             level.Wipe?.Update(level);
             level.HiresSnow?.Update(level);
             level.Foreground.Update(level);
@@ -191,11 +190,17 @@ public sealed class StateManager {
         orig(level);
     }
 
-    private void ClearStateWhenSwitchScene(On.Monocle.Scene.orig_Begin orig, Scene self) {
+    private static void ClearStateWhenSwitchScene(On.Monocle.Scene.orig_Begin orig, Scene self) {
         orig(self);
+        foreach (SaveSlot slot in SaveSlotsManager.SaveSlots) {
+            slot.StateManager.ClearStateWhenSwitchSceneImpl(self);
+        }
+    }
+
+    private void ClearStateWhenSwitchSceneImpl(Scene self) {
         if (IsSaved) {
             if (self is Overworld && !SavedByTas && InGameOverworldHelperIsOpen.Value?.GetValue(null) as bool? != true) {
-                ClearState();
+                ClearStateImpl();
             }
 
             // 重启章节 Level 实例变更，所以之前预克隆的实体作废，需要重新克隆
@@ -205,23 +210,23 @@ public sealed class StateManager {
             }
 
             if (self.GetSession() is { } session && session.Area != savedLevel.Session.Area) {
-                ClearState();
+                ClearStateImpl();
             }
         }
     }
 
-    private void AutoLoadStateWhenDeath(On.Celeste.PlayerDeadBody.orig_End orig, PlayerDeadBody self) {
+    private static void AutoLoadStateWhenDeath(On.Celeste.PlayerDeadBody.orig_End orig, PlayerDeadBody self) {
         if (ModSettings.Enabled
             && ModSettings.AutoLoadStateAfterDeath
-            && IsSaved
-            && !SavedByTas
+            && Instance.IsSaved
+            && !Instance.SavedByTas
             && !self.finished
             && Engine.Scene is Level level
             && level.Entities.FindFirst<PlayerSeeker>() == null
            ) {
             level.OnEndOfFrame += () => {
-                if (IsSaved) {
-                    LoadState(false);
+                if (Instance.IsSaved) {
+                    Instance.LoadStateImpl(false);
                 } else {
                     level.DoScreenWipe(wipeIn: false, self.DeathAction ?? level.Reload);
                 }
@@ -238,10 +243,10 @@ public sealed class StateManager {
     // ReSharper disable once UnusedMember.Global
     // ReSharper disable once MemberCanBePrivate.Global
     public bool SaveState() {
-        return SaveState(true);
+        return SaveSlotsManager.SaveState(true);
     }
 
-    private bool SaveState(bool tas) {
+    internal bool SaveStateImpl(bool tas) {
         if (Engine.Scene is not Level level) {
             return false;
         }
@@ -257,7 +262,7 @@ public sealed class StateManager {
 
         if (IsSaved) {
             ClearBeforeSave = true;
-            ClearState();
+            ClearStateImpl();
             ClearBeforeSave = false;
         }
 
@@ -290,10 +295,10 @@ public sealed class StateManager {
     // public for TAS Mod
     // ReSharper disable once UnusedMember.Global
     public bool LoadState() {
-        return LoadState(true);
+        return SaveSlotsManager.LoadState(true);
     }
 
-    private bool LoadState(bool tas) {
+    internal bool LoadStateImpl(bool tas) {
         if (Engine.Scene is not Level level) {
             return false;
         }
@@ -481,9 +486,13 @@ public sealed class StateManager {
     }
 
     // public for tas
+    public void ClearState() {
+        SaveSlotsManager.ClearState(true);
+    }
+
     // ReSharper disable once MemberCanBePrivate.Global
     // 为了照顾使用体验，不主动触发内存回收（会卡顿，增加 SaveState 时间）
-    public void ClearState() {
+    public void ClearStateImpl() {
         preCloneTask?.Wait();
 
         // fix: 读档冻结时被TAS清除状态后无法解除冻结
@@ -502,7 +511,7 @@ public sealed class StateManager {
     }
 
     public void ClearStateAndShowMessage() {
-        ClearState();
+        ClearStateImpl();
         PopupMessageUtils.Show(DialogIds.ClearStateToolTip.DialogClean(), DialogIds.ClearStateDialog);
     }
 

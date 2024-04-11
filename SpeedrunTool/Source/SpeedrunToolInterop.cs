@@ -40,7 +40,7 @@ public static class SpeedrunToolInterop {
         /// <param name="beforeSaveState"></param>
         /// <param name="beforeLoadState"></param>
         /// <param name="preCloneEntities"></param>
-        /// <returns>SaveLoadAction instance, used for unregister</returns>
+        /// <returns>SaveLoadAction instance, used for unregister (Please save your values into the dictionary, otherwise multi saveslots will not be supported.)</returns>
         public static object RegisterSaveLoadAction(Action<Dictionary<Type, Dictionary<string, object>>, Level> saveState,
             Action<Dictionary<Type, Dictionary<string, object>>, Level> loadState, Action clearState,
             Action<Level> beforeSaveState, Action<Level> beforeLoadState, Action preCloneEntities) {
