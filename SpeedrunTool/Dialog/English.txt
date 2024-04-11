@@ -1,0 +1,141 @@
+# ================================== Common ==================================
+SPEEDRUN_TOOL_ON=  ON
+SPEEDRUN_TOOL_OFF= OFF
+SPEEDRUN_TOOL_ALL= ALL
+
+# ================================== Mod Options Menu ==================================
+SPEEDRUN_TOOL=              Speedrun Tool
+SPEEDRUN_TOOL_ENABLED=      Enabled
+SPEEDRUN_TOOL_ROOM_TIMER=   Room Timer
+SPEEDRUN_TOOL_STATE=        State
+SPEEDRUN_TOOL_MORE_OPTIONS= More Options
+
+# ================================== Room Timer Options ==================================
+SPEEDRUN_TOOL_NEXT_ROOM=                   Next Room
+SPEEDRUN_TOOL_CURRENT_ROOM=                Current Room
+SPEEDRUN_TOOL_NUMBER_OF_ROOMS=             Number of Timed Rooms
+SPEEDRUN_TOOL_END_POINT_STYLE=             End Point Style
+SPEEDRUN_TOOL_TIME_SUMMIT_FLAG=            Time Summit Flag
+SPEEDRUN_TOOL_TIME_HEART_CASSETTE=         Time Heart and Cassette
+SPEEDRUN_TOOL_AUTO_TURN_OFF_ROOM_TIMER=    Turn Off Timer When Restart Game/Chapter
+SPEEDRUN_TOOL_ROOM_ID_END_POINT=           Room ID End Point: {0}
+SPEEDRUN_TOOL_RESET_ROOM_TIMER_PB_TOOLTIP= Cleared Room Timer PB and End Point
+SPEEDRUN_TOOL_RESET_ROOM_TIMER_PB_DIALOG=
+    [MADELINE left normal]
+    Cleared room timer PB and end point~
+SPEEDRUN_TOOL_DISPLAY_ROOM_GOLD=           Gold Timer when Best Room Time
+
+# ================================== State ==================================
+SPEEDRUN_TOOL_FREEZE_AFTER_LOAD_STATE=     Pause Game after Load State
+SPEEDRUN_TOOL_IGNORE_HOLDING_KEYS=         Ignore Holding Keys
+SPEEDRUN_TOOL_AUTO_LOAD_STATE_AFTER_DEATH= Auto Load State after Death
+SPEEDRUN_TOOL_AUTO_CLEAR_STATE_ON_SCREEN_TRANSITION= Auto Clear State on Screen Transition
+SPEEDRUN_TOOL_NO_GC_AFTER_LOAD_STATE=      No GC after Load State
+SPEEDRUN_TOOL_SAVE_TIME_AND_DEATHS=        Save Time and Deaths
+SPEEDRUN_TOOL_SAVE_EXTENDED_VARIANTS=      Save Extended Variants
+SPEEDRUN_TOOL_SAVE_STATE=                  Save State
+SPEEDRUN_TOOL_LOAD_STATE=                  Load State
+SPEEDRUN_TOOL_CLEAR_STATE=                 Clear State
+SPEEDRUN_TOOL_CLEAR_STATE_TOOLTIP=         Cleared the state
+SPEEDRUN_TOOL_NOT_SAVED_STATE_TOOLTIP=     Not saved state yet
+SPEEDRUN_TOOL_CLEAR_STATE_DIALOG=
+    [MADELINE left normal]
+    Cleared the state~
+SPEEDRUN_TOOL_NOT_SAVED_STATE_YET_DIALOG=
+    [MADELINE left upset]
+    Not saved state yet.
+SPEEDRUN_TOOL_CLEAR_STATE_DIALOG_BADELINE=
+    [BADELINE left normal]
+    Cleared the state~
+SPEEDRUN_TOOL_NOT_SAVED_STATE_YET_DIALOG_BADELINE=
+    [BADELINE left yell]
+    Not saved state yet!
+
+# ================================== End Point Style ==================================
+SPEEDRUN_TOOL_FLAG=       Flag
+SPEEDRUN_TOOL_GOLD_BERRY= Gold Berry
+SPEEDRUN_TOOL_MADELINE=   Madeline
+SPEEDRUN_TOOL_BADELINE=   Badeline
+SPEEDRUN_TOOL_GRANNY=     Granny
+SPEEDRUN_TOOL_THEO=       Theo
+SPEEDRUN_TOOL_OSHIRO=     Oshiro
+SPEEDRUN_TOOL_BIRD=       Bird
+SPEEDRUN_TOOL_EYE_BAT=    Eye Bat
+SPEEDRUN_TOOL_OGMO=       Ogmo
+SPEEDRUN_TOOL_SKYTORN=    Skytorn
+SPEEDRUN_TOOL_TOWERFALL=  TowerFall
+SPEEDRUN_TOOL_YURI=       Yuri
+SPEEDRUN_TOOL_RANDOM=     Random
+
+# ================================== Hotkey Config ==================================
+SPEEDRUN_TOOL_KEYBOARD=                      Keyboard
+SPEEDRUN_TOOL_CONTROLLER=                    Controller
+SPEEDRUN_TOOL_COMBO_HOTKEY_DESCRIPTION=      Binding multiple keys to a control will cause those keys to act as a keycombo
+SPEEDRUN_TOOL_PRESS_DELETE_TO_CLEAR_HOTKEYS= Press Delete/Journal to clear hotkeys
+SPEEDRUN_TOOL_TOGGLE_HOTKEYS=                Toggle Hotkeys
+SPEEDRUN_TOOL_OPEN_DEBUG_MAP=                Open Debug Map
+SPEEDRUN_TOOL_RESET_ROOM_TIMER_PB=           Clear Room Timer PB and End Point
+SPEEDRUN_TOOL_SWITCH_ROOM_TIMER=             Switch Room Timer
+SPEEDRUN_TOOL_INCREASE_TIMED_ROOMS=          Increase Number of Timed Rooms
+SPEEDRUN_TOOL_DECREASE_TIMED_ROOMS=          Decrease Number of Timed Rooms
+SPEEDRUN_TOOL_SET_END_POINT=                 Set Room Timer End Point
+SPEEDRUN_TOOL_SET_ADDITIONAL_END_POINT=      Set Room Timer Additional End Point
+SPEEDRUN_TOOL_TELEPORT_TO_PREVIOUS_ROOM=     Teleport to Previous Room
+SPEEDRUN_TOOL_TELEPORT_TO_NEXT_ROOM=         Teleport to Next Room
+SPEEDRUN_TOOL_ALREADY_FIRST_ROOM_TOOLTIP=    Already in the first room
+SPEEDRUN_TOOL_ALREADY_FIRST_ROOM_DIALOG=
+    [MADELINE left upset]
+    Already in the first room.
+SPEEDRUN_TOOL_ALREADY_FIRST_ROOM_DIALOG_BADELINE=
+    [BADELINE left yell]
+    Already in the first room!
+SPEEDRUN_TOOL_ALREADY_LAST_ROOM_TOOLTIP=     Already in the last room
+SPEEDRUN_TOOL_ALREADY_LAST_ROOM_DIALOG=
+    [MADELINE left upset]
+    Already in the last room.
+SPEEDRUN_TOOL_ALREADY_LAST_ROOM_DIALOG_BADELINE=
+    [BADELINE left yell]
+    Already in the last room!
+SPEEDRUN_TOOL_SWITCH_AUTO_LOAD_STATE=        Toggle Auto Load State
+SPEEDRUN_TOOL_SPAWN_TOWER_VIEWER=            Spawn Binoculars/Toggle Camera Lock
+SPEEDRUN_TOOL_TOGGLE_FULLSCREEN=             Toggle Fullscreen
+SPEEDRUN_TOOL_EXPORT_ROOM_TIMES=             Export Room Times
+SPEEDRUN_TOOL_EXPORT_ROOM_TIMES_SUCCESS=     Times successfully exported to {0}
+SPEEDRUN_TOOL_EXPORT_ROOM_TIMES_FAIL=        Must be in a level to export room times
+
+# ================================== Death Statistics ==================================
+SPEEDRUN_TOOL_DEATH_STATISTICS=              Death Statistics
+SPEEDRUN_TOOL_MAX_NUMBER_OF_DEATH_DATA=      Max Number of Death Data
+SPEEDRUN_TOOL_CHECK_DEATH_STATISTICS=        Check Death Data
+SPEEDRUN_TOOL_DEATH_STATISTICS_HEADER=       Death Statistics (Slot {0})
+SPEEDRUN_TOOL_DEATH_STATISTICS_HEADER_DEBUG= Death Statistics (Debug Slot)
+SPEEDRUN_TOOL_CLEAR_DEATH_STATISTICS=        Clear Data
+SPEEDRUN_TOOL_CHAPTER=                       Chapter
+SPEEDRUN_TOOL_ROOM=                          Room
+SPEEDRUN_TOOL_LOST_TIME=                     Lost Time
+SPEEDRUN_TOOL_CAUSE_OF_DEATH=                Cause of Death
+SPEEDRUN_TOOL_TOTAL_DEATH_COUNT=             Total Death Count
+SPEEDRUN_TOOL_TOTAL_LOST_TIME=               Total Lost Time
+SPEEDRUN_TOOL_NO_DATA=                       No Data
+
+# ================================== More Options ==================================
+SPEEDRUN_TOOL_TELEPORT_ROOM_CATEGORY=              Teleport Room Category
+SPEEDRUN_TOOL_DEFAULT=                             Default
+SPEEDRUN_TOOL_ANY=                                 Any%
+SPEEDRUN_TOOL_RESPAWN_SPEED=                       Respawn Speed
+SPEEDRUN_TOOL_RESTART_CHAPTER_SPEED=               Restart Chapter Speed
+SPEEDRUN_TOOL_SKIP_RESTART_CHAPTER_SCREEN_WIPE=    Skip Restart Chapter Screen Wipe
+SPEEDRUN_TOOL_ALLOW_PAUSE_DURING_DEATH=            Allow Pause during Death
+SPEEDRUN_TOOL_MUTE_IN_BACKGROUND=                  Mute in Background
+SPEEDRUN_TOOL_FIX_CORE_REFILL_DASH_AFTER_TELEPORT= Fix Core Refill Dash after Teleport
+SPEEDRUN_TOOL_POPUP_MESSAGE_STYLE=                 Popup Message Style
+SPEEDRUN_TOOL_TOOLTIP=                             Tooltip
+SPEEDRUN_TOOL_DIALOG_BOX=                          Dialog Box
+SPEEDRUN_TOOL_OPTION_STATE=                        {0}: {1}
+SPEEDRUN_TOOL_ENABLE_TIMER_ON_AREA_COMPLETE=       Enable Timer on Area Complete
+SPEEDRUN_TOOL_FILE=                                File
+SPEEDRUN_TOOL_ROOM_TIMER_EXPORT_TYPE=              Room Timer Export Type
+SPEEDRUN_TOOL_CLIPBOARD=                           Clipboard
+SPEEDRUN_TOOL_HOTKEYS=                             Hotkeys
+SPEEDRUN_TOOL_HOTKEYS_CONFIG=                      Hotkeys Config
+SPEEDRUN_TOOL_UNLOCK_CAMERA=                       Unlock Camera
