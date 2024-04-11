@@ -26,6 +26,8 @@ public static class SaveSlotsManager {
     public static bool SwitchSlot(int index) {
         return SwitchSlot(GetSlotName(index));
     }
+
+    [Command("switch_slot", "Switch to another SRT save slot")]
     public static bool SwitchSlot(string name) {
         if (name != SlotName && !IsAllFree()) {
             return false;
@@ -53,6 +55,7 @@ public static class SaveSlotsManager {
 
         if (tas) {
             string orig = SlotName;
+            SwitchSlot(TasSlot);
             bool result = StateManagerInstance.SaveStateImpl(true);
             SwitchSlot(orig);
             return result;
@@ -139,7 +142,7 @@ public class SaveSlot {
 
     public bool SaveLoadActionInitialized = false;
 
-    public readonly List<SaveLoadAction> All = new();
+    public List<SaveLoadAction> All = new();
 
     public SaveSlot(string name) {
         Name = name;
